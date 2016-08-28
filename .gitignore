@@ -32,3 +32,6 @@ _testmain.go
 
 #All app binaries
 bin/*
+
+#All libs
+pkg/*

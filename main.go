@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/csv"
-	"fmt"
+	"github.com/jmp3833/finance/db"
 	"github.com/jmp3833/finance/models"
 	"io"
 	"io/ioutil"
@@ -36,6 +36,7 @@ func main() {
 			Amount:      transamount,
 			Date:        chasetrans[1]}
 
-		fmt.Printf("%+v\n", record)
+		//TODO: Stow struct record in DB
 	}
+	db.GetDB()
 }
