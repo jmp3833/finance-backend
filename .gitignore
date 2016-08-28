@@ -22,3 +22,13 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+#local transaction data
+*.json
+*.csv
+
+#Local mac cruft
+*.DS_Store
+
+#All app binaries
+bin/*
