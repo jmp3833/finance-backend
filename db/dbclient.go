@@ -2,13 +2,14 @@ package db
 
 import (
 	"fmt"
+	"github.com/jmp3833/finance/models"
 	"github.com/ziutek/mymysql/mysql"
 	_ "github.com/ziutek/mymysql/native"
 	"log"
 )
 
 //TODO: Abstract away from local instance
-func GetDB() {
+func GetDBInstance() mysql.Conn {
 	user := "justin"
 	pass := "test123"
 	dbname := "test"
@@ -20,11 +21,34 @@ func GetDB() {
 		log.Fatal(err)
 	}
 
-	rows, res, err := dbinstance.Query("select * from chase where description = ''")
+	return dbinstance
+}
+
+func AddRecord(record models.Chase, db mysql.Conn) {
+	stmt, err := db.Prepare("insert into chase values (?, ?, ?, ?)")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(rows)
-	fmt.Println(res)
+	//TODO: remove me
+	fmt.Printf("%+v\n", record)
+
+	_, err = stmt.Run(
+		record.Transtype,
+		record.Description,
+		record.Amount,
+		record.Date)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func GetRecordById(id int, dbinstance mysql.Conn) []mysql.Row {
+	rows, _, err := dbinstance.Query(
+		"select * from chase where id = '%s'", id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return rows
 }
