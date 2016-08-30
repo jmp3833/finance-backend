@@ -26,9 +26,9 @@ func GetDBInstance() mysql.Conn {
 
 func AddRecord(record models.Chase, db mysql.Conn) {
 	stmt, err := db.Prepare(
-		"insert into chase 
+		`insert into chase 
 	  (ref, transtype, description, amount, date)
-	  values (?, ?, ?, ?, ?)")
+	  values (?, ?, ?, ?, ?)`)
 
 	if err != nil {
 		log.Fatal(err)
