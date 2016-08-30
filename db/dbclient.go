@@ -34,9 +34,6 @@ func AddRecord(record models.Chase, db mysql.Conn) {
 		log.Fatal(err)
 	}
 
-	//TODO: remove me
-	fmt.Printf("%+v\n", record)
-
 	_, err = stmt.Run(
 		genid(record),
 		record.Transtype,
@@ -47,6 +44,8 @@ func AddRecord(record models.Chase, db mysql.Conn) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Printf("%+v\n", record)
 }
 
 func GetRecordById(id int, dbinstance mysql.Conn) []mysql.Row {
