@@ -1,14 +1,33 @@
 package models
 
-type FcU struct{ Bank }
-type Simple struct{ Bank }
-type Chase struct{ Bank }
-type BofA struct{ Bank }
+const FcuName = "Empower Federal Credit Union"
+const ChaseName = "Chase Bank"
+const BofAName = "Bank of America"
+const SimpleName = "Simple inc. Bank"
+
+type fcU struct{ Bank }
+type simple struct{ Bank }
+type chase struct{ Bank }
+type bofA struct{ Bank }
 
 type Bank struct {
+	BankName    string
 	Ref         string
 	Date        string
 	Description string
 	Amount      float64
 	Transtype   string
+	DbName      string
+}
+
+func GetEmpowerModel(bank Bank) Bank {
+	bank.BankName = FcuName
+	bank.DbName = "fcu"
+	return bank
+}
+
+func GetChaseModel(bank Bank) Bank {
+	bank.BankName = ChaseName
+	bank.DbName = "chase"
+	return bank
 }

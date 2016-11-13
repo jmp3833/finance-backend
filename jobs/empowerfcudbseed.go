@@ -34,11 +34,11 @@ func SeedEmpowerDb(datafile string) {
 
 		transamount, err := strconv.ParseFloat(fcuTrans[4], 2)
 
-		record := models.Bank{
+		record := models.GetChaseModel(models.Bank{
 			Transtype:   fcuTrans[3],
 			Description: fcuTrans[8],
 			Amount:      math.Abs(transamount),
-			Date:        fcuTrans[1]}
+			Date:        fcuTrans[1]})
 
 		dbinstance := db.GetDBInstance()
 		db.AddRecord(record, dbinstance)
