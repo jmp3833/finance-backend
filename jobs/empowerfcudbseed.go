@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-func SeedChaseDB(datafile string) {
+func SeedEmpowerDb(datafile string) {
 	dat, err := ioutil.ReadFile(datafile)
 	if err != nil {
 		log.Fatal(err)
@@ -24,7 +24,7 @@ func SeedChaseDB(datafile string) {
 	csvreader.Read()
 
 	for {
-		chasetrans, err := csvreader.Read()
+		fcuTrans, err := csvreader.Read()
 		if err == io.EOF {
 			break
 		}
@@ -32,13 +32,13 @@ func SeedChaseDB(datafile string) {
 			log.Fatal(err)
 		}
 
-		transamount, err := strconv.ParseFloat(chasetrans[4], 2)
+		transamount, err := strconv.ParseFloat(fcuTrans[4], 2)
 
 		record := models.Bank{
-			Transtype:   chasetrans[0],
-			Description: chasetrans[3],
+			Transtype:   fcuTrans[3],
+			Description: fcuTrans[8],
 			Amount:      math.Abs(transamount),
-			Date:        chasetrans[1]}
+			Date:        fcuTrans[1]}
 
 		dbinstance := db.GetDBInstance()
 		db.AddRecord(record, dbinstance)
