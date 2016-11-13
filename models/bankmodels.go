@@ -11,12 +11,12 @@ type chase struct{ Bank }
 type bofA struct{ Bank }
 
 type Bank struct {
-	BankName    string
-	Ref         string
-	Date        string
+	Transtype   string
 	Description string
 	Amount      float64
-	Transtype   string
+	Date        string
+	Ref         string
+	BankName    string
 	DbName      string
 }
 

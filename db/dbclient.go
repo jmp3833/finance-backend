@@ -25,14 +25,17 @@ func GetDBInstance() mysql.Conn {
 }
 
 func AddRecord(record models.Bank, db mysql.Conn) {
-	stmt, err := db.Prepare(
-		`insert into chase 
-	  (ref, transtype, description, amount, date)
-	  values (?, ?, ?, ?, ?)`)
+	preparedStmt := `insert into ` + record.DbName +
+		`(ref, transtype, description, amount, date)
+	      values (?, ?, ?, ?, ?)`
+
+	stmt, err := db.Prepare(preparedStmt)
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Printf("%+v\n", record)
 
 	_, err = stmt.Run(
 		genid(record),
@@ -48,9 +51,9 @@ func AddRecord(record models.Bank, db mysql.Conn) {
 	fmt.Printf("%+v\n", record)
 }
 
-func GetRecordById(id int, dbinstance mysql.Conn) []mysql.Row {
+func GetRecordById(id int, dbName string, dbinstance mysql.Conn) []mysql.Row {
 	rows, _, err := dbinstance.Query(
-		"select * from chase where id = '%s'", id)
+		"select * from "+dbName+"where id = '%s'", id)
 	if err != nil {
 		log.Fatal(err)
 	}

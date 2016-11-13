@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-func SeedChaseDB(datafile string) {
+func SeedChaseDb(datafile string) {
 	dat, err := ioutil.ReadFile(datafile)
 	if err != nil {
 		log.Fatal(err)
@@ -42,5 +42,6 @@ func SeedChaseDB(datafile string) {
 
 		dbinstance := db.GetDBInstance()
 		db.AddRecord(record, dbinstance)
+		dbinstance.Close()
 	}
 }
