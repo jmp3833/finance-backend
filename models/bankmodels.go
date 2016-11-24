@@ -1,5 +1,10 @@
 package models
 
+import (
+	"math"
+	"strconv"
+)
+
 const (
 	EmpowerFCU    = "Empower Federal Credit Union"
 	BankOfAmerica = "Bank of America"
@@ -37,6 +42,13 @@ type BankOfAmericaTransaction struct {
 }
 
 func (t ChaseTransaction) GetTransaction(csvLine []string) Transaction {
-	//TODO: Finish me
-	return Transaction{}
+	transamount, err := strconv.ParseFloat(csvLine[4], 2)
+	if err != nil {
+		panic(err)
+	}
+	return Transaction{
+		Transtype:   csvLine[0],
+		Description: csvLine[3],
+		Amount:      math.Abs(transamount),
+		Date:        csvLine[1]}
 }
