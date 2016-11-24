@@ -34,7 +34,6 @@ func InsertTransaction(db mysql.Conn, t models.Transaction) {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", t)
 	_, err = stmt.Run(genid(t),
 		t.Transtype,
 		t.Description,
@@ -44,10 +43,10 @@ func InsertTransaction(db mysql.Conn, t models.Transaction) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Printf("%+v\n", t)
 }
 
 func genid(t models.Transaction) string {
+	fmt.Printf("Generating Id for Transaction:")
+	fmt.Printf("%+v\n", t)
 	return t.Date + t.Description
 }

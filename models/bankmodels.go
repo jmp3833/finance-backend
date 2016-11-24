@@ -17,7 +17,7 @@ type Transaction struct {
 	Description string
 	Amount      float64
 	Date        string
-	Name        string
+	BankName    string
 	DbName      string
 }
 
@@ -50,5 +50,7 @@ func (t ChaseTransaction) GetTransaction(csvLine []string) Transaction {
 		Transtype:   csvLine[0],
 		Description: csvLine[3],
 		Amount:      math.Abs(transamount),
-		Date:        csvLine[1]}
+		Date:        csvLine[1],
+		DbName:      "chase",
+		BankName:    Chase}
 }
