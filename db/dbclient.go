@@ -9,7 +9,7 @@ import (
 )
 
 //TODO: Abstract away from local instance
-func GetDBInstance() mysql.Conn {
+func GetDbInstance() mysql.Conn {
 	user := "justin"
 	pass := "test123"
 	dbname := "test"
@@ -24,10 +24,9 @@ func GetDBInstance() mysql.Conn {
 	return dbinstance
 }
 
-func AddRecord(record models.Bank, db mysql.Conn) {
-	preparedStmt := `insert into ` + record.DbName +
-		`(ref, transtype, description, amount, date)
-	      values (?, ?, ?, ?, ?)`
+func InsertTransaction(db mysql.Conn, t models.Transaction) {
+	preparedStmt := `insert into ` + t.DbName +
+		`(ref, transtype, description, amount, date) values (?, ?, ?, ?, ?)`
 
 	stmt, err := db.Prepare(preparedStmt)
 
@@ -35,31 +34,20 @@ func AddRecord(record models.Bank, db mysql.Conn) {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", record)
-
-	_, err = stmt.Run(
-		genid(record),
-		record.Transtype,
-		record.Description,
-		record.Amount,
-		record.Date)
+	fmt.Printf("%+v\n", t)
+	_, err = stmt.Run(genid(t),
+		t.Transtype,
+		t.Description,
+		t.Amount,
+		t.Date)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", record)
+	fmt.Printf("%+v\n", t)
 }
 
-func GetRecordById(id int, dbName string, dbinstance mysql.Conn) []mysql.Row {
-	rows, _, err := dbinstance.Query(
-		"select * from "+dbName+"where id = '%s'", id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return rows
-}
-
-func genid(record models.Bank) string {
-	return record.Date + record.Description
+func genid(t models.Transaction) string {
+	return t.Date + t.Description
 }

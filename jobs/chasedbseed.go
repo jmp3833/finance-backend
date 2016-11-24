@@ -8,23 +8,22 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-	"math"
-	"strconv"
 )
 
-func SeedChaseDb(datafile string) {
-	dat, err := ioutil.ReadFile(datafile)
+func SeedDb(datafile string, record models.Record) {
+	f, err := ioutil.ReadFile(datafile)
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	csvreader := csv.NewReader(bytes.NewReader(dat))
+	csvreader := csv.NewReader(bytes.NewReader(f))
 
 	//burn header line
 	csvreader.Read()
 
 	for {
-		chasetrans, err := csvreader.Read()
+		line, err := csvreader.Read()
 		if err == io.EOF {
 			break
 		}
@@ -32,16 +31,9 @@ func SeedChaseDb(datafile string) {
 			log.Fatal(err)
 		}
 
-		transamount, err := strconv.ParseFloat(chasetrans[4], 2)
+		dbinstance := db.GetDbInstance()
+		defer dbinstance.Close()
 
-		record := models.GetEmpowerModel(models.Bank{
-			Transtype:   chasetrans[0],
-			Description: chasetrans[3],
-			Amount:      math.Abs(transamount),
-			Date:        chasetrans[1]})
-
-		dbinstance := db.GetDBInstance()
-		db.AddRecord(record, dbinstance)
-		dbinstance.Close()
+		db.InsertTransaction(dbinstance, record.GetTransaction(line))
 	}
 }

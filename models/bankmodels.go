@@ -1,33 +1,42 @@
 package models
 
-const FcuName = "Empower Federal Credit Union"
-const ChaseName = "Chase Bank"
-const BofAName = "Bank of America"
-const SimpleName = "Simple inc. Bank"
+const (
+	EmpowerFCU    = "Empower Federal Credit Union"
+	BankOfAmerica = "Bank of America"
+	Simple        = "Simple inc. Bank"
+	Chase         = "Chase Bank"
+)
 
-type fcU struct{ Bank }
-type simple struct{ Bank }
-type chase struct{ Bank }
-type bofA struct{ Bank }
-
-type Bank struct {
+type Transaction struct {
 	Transtype   string
 	Description string
 	Amount      float64
 	Date        string
-	Ref         string
-	BankName    string
+	Name        string
 	DbName      string
 }
 
-func GetEmpowerModel(bank Bank) Bank {
-	bank.BankName = FcuName
-	bank.DbName = "fcu"
-	return bank
+type Record interface {
+	GetTransaction(csvLine []string) Transaction
 }
 
-func GetChaseModel(bank Bank) Bank {
-	bank.BankName = ChaseName
-	bank.DbName = "chase"
-	return bank
+type EmpowerFcuTransaction struct {
+	Transaction
+}
+
+type SimpleTransaction struct {
+	Transaction
+}
+
+type ChaseTransaction struct {
+	Transaction
+}
+
+type BankOfAmericaTransaction struct {
+	Transaction
+}
+
+func (t ChaseTransaction) GetTransaction(csvLine []string) Transaction {
+	//TODO: Finish me
+	return Transaction{}
 }
