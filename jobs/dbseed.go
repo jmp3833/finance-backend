@@ -21,6 +21,8 @@ func SeedDb(datafile string, record models.Record) {
 
 	//burn header line
 	csvreader.Read()
+	dbinstance := db.GetDbInstance()
+	defer dbinstance.Close()
 
 	for {
 		line, err := csvreader.Read()
@@ -31,9 +33,8 @@ func SeedDb(datafile string, record models.Record) {
 			log.Fatal(err)
 		}
 
-		dbinstance := db.GetDbInstance()
 		defer dbinstance.Close()
 
-		db.InsertTransaction(dbinstance, record.GetTransaction(line))
+		db.InsertTransaction(dbinstance, record.ParseTransactionFromCsvLine(line))
 	}
 }

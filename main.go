@@ -15,7 +15,9 @@ func main() {
 	}
 	switch args[0] {
 	case "chase-seed":
-		handleSeedChaseInput()
+		handleSeed(models.ChaseTransaction{})
+	case "fcu-seed":
+		handleSeed(models.EmpowerFcuTransaction{})
 	default:
 		printHelp()
 	}
@@ -29,11 +31,11 @@ func printHelp() {
 		"Seed DB with CSV provided by Empower FCU bank export")
 }
 
-func handleSeedChaseInput() {
+func handleSeed(record models.Record) {
 	args := os.Args[1:]
 	if len(args) < 2 {
 		printHelp()
 		return
 	}
-	jobs.SeedDb(args[1], models.ChaseTransaction{})
+	jobs.SeedDb(args[1], record)
 }
