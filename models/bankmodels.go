@@ -77,3 +77,17 @@ func (t EmpowerFcuTransaction) ParseTransactionFromCsvLine(csvLine []string) Tra
 		DbName:      "fcu",
 		BankName:    EmpowerFCU}
 }
+
+func (t SimpleTransaction) ParseTransactionFromCsvLine(csvLine []string) Transaction {
+	transamount, err := strconv.ParseFloat(csvLine[3], 2)
+	if err != nil {
+		panic(err)
+	}
+	return Transaction{
+		Transtype:   csvLine[4],
+		Description: csvLine[7],
+		Amount:      math.Abs(transamount),
+		Date:        csvLine[0],
+		DbName:      "simple",
+		BankName:    Simple}
+}

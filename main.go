@@ -14,6 +14,8 @@ func main() {
 		return
 	}
 	switch args[0] {
+	case "simple-seed":
+		handleSeed(models.SimpleTransaction{})
 	case "chase-seed":
 		handleSeed(models.ChaseTransaction{})
 	case "fcu-seed":
