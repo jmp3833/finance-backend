@@ -20,6 +20,8 @@ func main() {
 		handleSeed(models.ChaseTransaction{})
 	case "fcu-seed":
 		handleSeed(models.EmpowerFcuTransaction{})
+	case "bofa-seed":
+		handleSeed(models.BankOfAmericaTransaction{})
 	default:
 		printHelp()
 	}
@@ -27,10 +29,10 @@ func main() {
 
 func printHelp() {
 	fmt.Println("Accepted Command line args:")
-	fmt.Println("chase-seed <path/to/csvfile> : " +
-		"Seed DB with CSV provided by chase bank export")
-	fmt.Println("fcu-seed <path/to/csvfile> : " +
-		"Seed DB with CSV provided by Empower FCU bank export")
+	fmt.Println("chase-seed <path/to/csvfile>")
+	fmt.Println("fcu-seed <path/to/csvfile>")
+	fmt.Println("simple-seed <path/to/csvfile>")
+	fmt.Println("bofa-seed<path/to/csvfile>")
 }
 
 func handleSeed(record models.Record) {

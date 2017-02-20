@@ -91,3 +91,17 @@ func (t SimpleTransaction) ParseTransactionFromCsvLine(csvLine []string) Transac
 		DbName:      "simple",
 		BankName:    Simple}
 }
+
+func (t BankOfAmericaTransaction) ParseTransactionFromCsvLine(csvLine []string) Transaction {
+	transamount, err := strconv.ParseFloat(csvLine[4], 2)
+	if err != nil {
+		panic(err)
+	}
+	return Transaction{
+		Transtype:   "",
+		Description: csvLine[3],
+		Amount:      math.Abs(transamount),
+		Date:        csvLine[1],
+		DbName:      "bofa",
+		BankName:    BankOfAmerica}
+}
