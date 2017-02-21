@@ -3,8 +3,8 @@ package jobs
 import (
 	"bytes"
 	"encoding/csv"
-	"github.com/jmp3833/finance/db"
-	"github.com/jmp3833/finance/models"
+	"github.com/jmp3833/finance-backend/db"
+	"github.com/jmp3833/finance-backend/models"
 	"io"
 	"io/ioutil"
 	"log"
@@ -34,7 +34,6 @@ func SeedDb(datafile string, record models.Record) {
 		}
 
 		defer dbinstance.Close()
-
 		db.InsertTransaction(dbinstance, record.ParseTransactionFromCsvLine(line))
 	}
 }

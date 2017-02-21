@@ -12,6 +12,7 @@ const (
 	Chase         = "Chase Bank"
 )
 
+//TODO: Distinguish between multiple cards
 type Transaction struct {
 	Transtype   string
 	Description string
@@ -99,9 +100,9 @@ func (t BankOfAmericaTransaction) ParseTransactionFromCsvLine(csvLine []string) 
 	}
 	return Transaction{
 		Transtype:   "",
-		Description: csvLine[3],
+		Description: csvLine[2],
 		Amount:      math.Abs(transamount),
-		Date:        csvLine[1],
+		Date:        csvLine[0],
 		DbName:      "bofa",
 		BankName:    BankOfAmerica}
 }

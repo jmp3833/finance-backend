@@ -1,6 +1,3 @@
---liquibase formatted sql
-
---changeset jpeterson:1
 create table chase (
   id MEDIUMINT NOT NULL AUTO_INCREMENT,
   ref VARCHAR(255),
@@ -42,5 +39,4 @@ create table bofa (
   PRIMARY KEY(id)
 );
 
---changeset jpeterson:2
 ALTER TABLE simple MODIFY COLUMN transtype VARCHAR(255)

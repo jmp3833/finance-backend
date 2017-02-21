@@ -2,7 +2,7 @@ package db
 
 import (
 	"fmt"
-	"github.com/jmp3833/finance/models"
+	"github.com/jmp3833/finance-backend/models"
 	"github.com/ziutek/mymysql/mysql"
 	_ "github.com/ziutek/mymysql/native"
 	"log"
@@ -11,8 +11,8 @@ import (
 //TODO: Abstract away from local instance
 func GetDbInstance() mysql.Conn {
 	user := "justin"
-	pass := "test123"
-	dbname := "test"
+	dbname := "finance"
+  pass := "test123"
 
 	dbinstance := mysql.New("tcp", "", "127.0.0.1:3306", user, pass, dbname)
 

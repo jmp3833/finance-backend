@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/jmp3833/finance/jobs"
-	"github.com/jmp3833/finance/models"
+	"github.com/jmp3833/finance-backend/jobs"
+	"github.com/jmp3833/finance-backend/models"
 	"os"
 )
 

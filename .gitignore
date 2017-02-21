@@ -38,3 +38,7 @@ pkg/*
 
 #Executable
 finance
+
+#vim files
+*.swp
+*.swo
