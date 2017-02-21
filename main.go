@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/jmp3833/finance-backend/jobs"
 	"github.com/jmp3833/finance-backend/models"
+	"github.com/jmp3833/finance-backend/routes"
+	"github.com/gin-gonic/gin"
 	"os"
 )
 
@@ -22,6 +24,8 @@ func main() {
 		handleSeed(models.EmpowerFcuTransaction{})
 	case "bofa-seed":
 		handleSeed(models.BankOfAmericaTransaction{})
+	case "api":
+	  startApi()
 	default:
 		printHelp()
 	}
@@ -33,6 +37,7 @@ func printHelp() {
 	fmt.Println("fcu-seed <path/to/csvfile>")
 	fmt.Println("simple-seed <path/to/csvfile>")
 	fmt.Println("bofa-seed<path/to/csvfile>")
+	fmt.Println("api start local api service")
 }
 
 func handleSeed(record models.Record) {
@@ -42,4 +47,8 @@ func handleSeed(record models.Record) {
 		return
 	}
 	jobs.SeedDb(args[1], record)
+}
+
+func startApi() {
+  routes.AddRoutes(gin.Default()).Run()
 }
