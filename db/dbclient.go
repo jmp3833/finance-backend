@@ -24,6 +24,25 @@ func GetDbInstance() mysql.Conn {
 	return dbinstance
 }
 
+func GetAllTransactions(db mysql.Conn, bankName string) []models.Transaction {
+  preparedStmt := `select * from ` + bankName + `LIMIT 100`
+	stmt, err := db.Prepare(preparedStmt)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+  records, _, err := stmt.Run()
+
+  //TODO: Parse records into Transaction structs
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+  return records;
+}
+
 func InsertTransaction(db mysql.Conn, t models.Transaction) {
 	preparedStmt := `insert into ` + t.DbName +
 		`(ref, transtype, description, amount, date) values (?, ?, ?, ?, ?)`
