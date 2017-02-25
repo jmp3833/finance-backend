@@ -68,9 +68,10 @@ func (t Transaction) ParseTransactionFromCsvLine(csvLine []string) Transaction {
 
 func (t ChaseTransaction) ParseTransactionFromCsvLine(csvLine []string) Transaction {
   var transactionType string
-
   transactionAmount, err := strconv.ParseFloat(csvLine[4], 2)
-	if err != nil { panic(err) }
+	if err != nil {
+    panic(err)
+  }
 
   if csvLine[0] == "Sale" {
     transactionType = Sale

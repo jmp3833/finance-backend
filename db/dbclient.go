@@ -63,8 +63,12 @@ func InsertTransaction(db *sql.DB, t models.Transaction) error {
     date,
     description,
   ) values (?, ?, ?, ?, ?, ?, ?, ?)`
+
   stmt, err := db.Prepare(preparedStmt)
-  if err != nil { return err }
+  if err != nil {
+    fmt.Print("Transaction: ", t, err)
+    return err
+  }
   _, err = stmt.Exec(
     t.UserId,
     t.AccountId,
