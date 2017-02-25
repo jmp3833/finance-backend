@@ -8,7 +8,6 @@ import (
   "log"
 )
 
-
 //TODO: Abstract away from local instance
 func GetDbInstance() *sql.DB {
   db, err := sql.Open("mysql", "justin:test123@/finance")
@@ -36,11 +35,14 @@ func GetAllTransactions(db sql.DB, bankName string) ([]models.Transaction, error
   for rows.Next() {
     err = rows.Scan(
       &transaction.Id,
-      &transaction.RefString,
-      &transaction.Transtype,
-      &transaction.Description,
+      &transaction.UserId,
+      &transaction.AccountId,
+      &transaction.BankName,
+      &transaction.BankType,
+      &transaction.TransactionType,
       &transaction.Amount,
       &transaction.Date,
+      &transaction.Description,
     )
     transactions = append(transactions, transaction)
     if err != nil { return nil, err }
@@ -50,22 +52,29 @@ func GetAllTransactions(db sql.DB, bankName string) ([]models.Transaction, error
 }
 
 func InsertTransaction(db *sql.DB, t models.Transaction) error {
-  preparedStmt := `insert into ` + t.DbName +
-  `(ref, transtype, description, amount, date) values (?, ?, ?, ?, ?)`
+  preparedStmt := `insert into transactions` +
+  `(
+    user_id,
+    account_id,
+    bank_name,
+    bank_type,
+    transaction_type,
+    amount,
+    date,
+    description,
+  ) values (?, ?, ?, ?, ?, ?, ?, ?)`
   stmt, err := db.Prepare(preparedStmt)
   if err != nil { return err }
-  _, err = stmt.Exec(genid(t),
-    t.Transtype,
-    t.Description,
+  _, err = stmt.Exec(
+    t.UserId,
+    t.AccountId,
+    t.BankName,
+    t.BankType,
+    t.TransactionType,
     t.Amount,
     t.Date,
+    t.Description,
   )
   if err != nil { return err }
   return nil
-}
-
-func genid(t models.Transaction) string {
-  fmt.Printf("Generating Id for Transaction:")
-  fmt.Printf("%+v\n", t)
-  return t.Date + t.Description
 }

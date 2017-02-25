@@ -6,7 +6,7 @@ import (
   "net/http"
 )
 
-func AddRoutes(r *gin.Engine) *gin.Engine {
+func AddTransactionRoutes(r *gin.Engine) *gin.Engine {
 	r.GET("/transactions/:bankName", func(c *gin.Context) {
 		dbinst := db.GetDbInstance()
 		bankName := c.Param("bankName")
