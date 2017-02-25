@@ -50,6 +50,8 @@ func handleSeed(record models.Record) {
 }
 
 func startApi() {
-  routes.AddHealthcheckRoutes(gin.Default())
-  routes.AddTransactionRoutes(gin.Default()).Run()
+  r := gin.Default()
+  r = routes.AddHealthcheckRoutes(r)
+  r = routes.AddTransactionRoutes(r)
+  r.Run()
 }
