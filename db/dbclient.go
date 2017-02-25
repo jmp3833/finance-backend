@@ -29,7 +29,7 @@ func GetAllTransactions(db sql.DB, bankName string) ([]models.Transaction, error
     transactions []models.Transaction
   )
   //TODO bind to bank type
-  preparedStmt := "select * from " + bankName + " LIMIT 100" + `;`
+  preparedStmt := "select * FROM transactions WHERE " + bankName + " LIMIT 100" + `;`
   fmt.Print(preparedStmt)
   rows, err := db.Query(preparedStmt)
   if err != nil { return nil, err }

@@ -6,7 +6,6 @@ import (
 )
 
 const (
-	EmpowerFCU    = "Empower Federal Credit Union"
 	BankOfAmerica = "Bank of America"
 	Simple        = "Simple inc. Bank"
 	Chase         = "Chase Bank"
@@ -14,14 +13,14 @@ const (
 
 //TODO: Distinguish between multiple cards
 type Transaction struct {
-	Transtype   string
-	Description string
+	Id				  int
+  UserId      int
+  AccountId   int
+	BankName    string
+	TransactionType string
 	Amount      float64
 	Date        string
-	BankName    string
-	DbName      string
-	Id					string
-	RefString   string
+	Description string
 }
 
 type Record interface {

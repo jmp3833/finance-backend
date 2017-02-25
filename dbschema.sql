@@ -1,0 +1,11 @@
+create table transactions (
+  id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  user_id MEDIUMINT NOT NULL,
+  account_id MEDIUMINT NOT NULL,
+  bank_name VARCHAR(255) NOT NULL
+  transaction_type VARCHAR(20) NOT NULL,
+  amount FLOAT(10, 2) NOT NULL, 
+  date VARCHAR(11) NOT NULL,
+  description VARCHAR(255),
+  PRIMARY KEY(id)
+);
