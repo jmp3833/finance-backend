@@ -3,49 +3,54 @@ package db
 import (
 	"fmt"
 	"github.com/jmp3833/finance-backend/models"
-	"github.com/ziutek/mymysql/mysql"
-	_ "github.com/ziutek/mymysql/native"
+	"database/sql"
 	"log"
 )
 
+
 //TODO: Abstract away from local instance
-func GetDbInstance() mysql.Conn {
-	user := "justin"
-	dbname := "finance"
-  pass := "test123"
-
-	dbinstance := mysql.New("tcp", "", "127.0.0.1:3306", user, pass, dbname)
-
-	err := dbinstance.Connect()
+func GetDbInstance() *sql.DB {
+	db, err := sql.Open("mysql", "justin:test123@/finance")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return dbinstance
+	//Incorrect username or password, or some other connection err
+	if db.Ping()  != nil {
+		log.Fatal(err)
+	}
+
+	return db
 }
 
-func GetAllTransactions(db mysql.Conn, bankName string) []models.Transaction {
-  preparedStmt := `select * from ` + bankName + `LIMIT 100`
+func GetAllTransactions(db sql.DB, bankName string) []models.Transaction {
+	var (
+		transaction models.Transaction
+		transactions []models.Transaction
+	)
+	preparedStmt := `select * from ` + bankName + `LIMIT 100`
 	stmt, err := db.Prepare(preparedStmt)
-
 	if err != nil {
 		log.Fatal(err)
 	}
-
-  records, _, err := stmt.Run()
-
-  //TODO: Parse records into Transaction structs
-
+	rows, err := db.Query(preparedStmt)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-  return records;
+	for rows.Next() {
+		err = rows.Scan(&person.Id, &person.First_Name, &person.Last_Name)
+		transactions = append(transactions, transaction)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+	}
+	defer rows.Close()
+	return transactions
 }
 
-func InsertTransaction(db mysql.Conn, t models.Transaction) {
+func InsertTransaction(db *sql.DB, t models.Transaction) {
 	preparedStmt := `insert into ` + t.DbName +
-		`(ref, transtype, description, amount, date) values (?, ?, ?, ?, ?)`
+	`(ref, transtype, description, amount, date) values (?, ?, ?, ?, ?)`
 
 	stmt, err := db.Prepare(preparedStmt)
 
@@ -53,11 +58,11 @@ func InsertTransaction(db mysql.Conn, t models.Transaction) {
 		log.Fatal(err)
 	}
 
-	_, err = stmt.Run(genid(t),
-		t.Transtype,
-		t.Description,
-		t.Amount,
-		t.Date)
+	_, err = stmt.Exec(genid(t),
+	t.Transtype,
+	t.Description,
+	t.Amount,
+	t.Date)
 
 	if err != nil {
 		log.Fatal(err)
