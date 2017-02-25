@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jmp3833/finance-backend/models"
 	"database/sql"
+  _ "github.com/go-sql-driver/mysql"
 	"log"
 )
 
@@ -19,7 +20,6 @@ func GetDbInstance() *sql.DB {
 	if db.Ping()  != nil {
 		log.Fatal(err)
 	}
-
 	return db
 }
 
@@ -28,17 +28,22 @@ func GetAllTransactions(db sql.DB, bankName string) []models.Transaction {
 		transaction models.Transaction
 		transactions []models.Transaction
 	)
-	preparedStmt := `select * from ` + bankName + `LIMIT 100`
-	stmt, err := db.Prepare(preparedStmt)
-	if err != nil {
-		log.Fatal(err)
-	}
+  //TODO bind to bank type
+	preparedStmt := "select * from " + bankName + " LIMIT 100" + `;`
+  fmt.Print(preparedStmt)
 	rows, err := db.Query(preparedStmt)
 	if err != nil {
 		log.Fatal(err)
 	}
 	for rows.Next() {
-		err = rows.Scan(&person.Id, &person.First_Name, &person.Last_Name)
+		err = rows.Scan(
+			&transaction.Id,
+			&transaction.RefString,
+			&transaction.Transtype,
+			&transaction.Description,
+			&transaction.Amount,
+			&transaction.Date,
+		)
 		transactions = append(transactions, transaction)
 		if err != nil {
 			log.Fatal(err.Error())

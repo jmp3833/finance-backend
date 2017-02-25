@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jmp3833/finance-backend/db"
+  "net/http"
 )
 
 func AddRoutes(r *gin.Engine) *gin.Engine {
@@ -11,15 +12,16 @@ func AddRoutes(r *gin.Engine) *gin.Engine {
 			"message": "pong",
 		})
 	})
-	return r;
+
 	r.GET("/transactions/:bankName", func(c *gin.Context) {
 		dbinst := db.GetDbInstance()
 		bankName := c.Param("bankName")
-		transactions := db.GetAllTransactions(dbinst, bankName)
+		transactions := db.GetAllTransactions(*dbinst, bankName)
 		c.JSON(http.StatusOK, gin.H{
 			"result": transactions,
 			"count":  len(transactions),
 		})
 	})
+
 	return r;
 }

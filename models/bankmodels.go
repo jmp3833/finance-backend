@@ -20,6 +20,8 @@ type Transaction struct {
 	Date        string
 	BankName    string
 	DbName      string
+	Id					string
+	RefString   string
 }
 
 type Record interface {
