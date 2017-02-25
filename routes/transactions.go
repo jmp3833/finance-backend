@@ -7,12 +7,6 @@ import (
 )
 
 func AddRoutes(r *gin.Engine) *gin.Engine {
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
 	r.GET("/transactions/:bankName", func(c *gin.Context) {
 		dbinst := db.GetDbInstance()
 		bankName := c.Param("bankName")

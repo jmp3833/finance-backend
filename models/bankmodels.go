@@ -11,12 +11,26 @@ const (
 	Chase         = "Chase Bank"
 )
 
+const (
+  Sale = "Sale"
+  Payment = "Payment"
+  Transfer = "Transfer"
+)
+
+const (
+  Credit = "Credit"
+  Debit = "Debit"
+)
+
 //TODO: Distinguish between multiple cards
+//TODO: Bubble up errors rather than panicking
+//TODO: Concept of users
 type Transaction struct {
 	Id				  int
   UserId      int
   AccountId   int
 	BankName    string
+  BankType    string
 	TransactionType string
 	Amount      float64
 	Date        string
@@ -53,57 +67,63 @@ func (t Transaction) ParseTransactionFromCsvLine(csvLine []string) Transaction {
 }
 
 func (t ChaseTransaction) ParseTransactionFromCsvLine(csvLine []string) Transaction {
-	transamount, err := strconv.ParseFloat(csvLine[4], 2)
-	if err != nil {
-		panic(err)
-	}
-	return Transaction{
-		Transtype:   csvLine[0],
-		Description: csvLine[3],
-		Amount:      math.Abs(transamount),
-		Date:        csvLine[1],
-		DbName:      "chase",
-		BankName:    Chase}
-}
+  var transactionType string
 
-func (t EmpowerFcuTransaction) ParseTransactionFromCsvLine(csvLine []string) Transaction {
-	transamount, err := strconv.ParseFloat(csvLine[4], 2)
-	if err != nil {
-		panic(err)
-	}
+  transactionAmount, err := strconv.ParseFloat(csvLine[4], 2)
+	if err != nil { panic(err) }
+
+  if csvLine[0] == "Sale" {
+    transactionType = Sale
+  } else {
+    transactionType = Payment
+  }
+
 	return Transaction{
-		Transtype:   csvLine[3],
-		Description: csvLine[8],
-		Amount:      math.Abs(transamount),
+    TransactionType: transactionType,
+    BankType: Credit,
+		Description: csvLine[3],
+		Amount:      math.Abs(transactionAmount),
 		Date:        csvLine[1],
-		DbName:      "fcu",
-		BankName:    EmpowerFCU}
+		BankName:    Chase,
+  }
 }
 
 func (t SimpleTransaction) ParseTransactionFromCsvLine(csvLine []string) Transaction {
-	transamount, err := strconv.ParseFloat(csvLine[3], 2)
-	if err != nil {
-		panic(err)
-	}
+	transactionAmount, err := strconv.ParseFloat(csvLine[3], 2)
+	if err != nil { panic(err) }
+
+  var transactionType string
+  if csvLine[0] == "purchase" {
+    transactionType = Sale
+  } else {
+    transactionType = Transfer
+  }
+
 	return Transaction{
-		Transtype:   csvLine[4],
+		TransactionType: transactionType,
+    BankType: Debit,
 		Description: csvLine[7],
-		Amount:      math.Abs(transamount),
+		Amount:      math.Abs(transactionAmount),
 		Date:        csvLine[0],
-		DbName:      "simple",
-		BankName:    Simple}
+		BankName:    Simple,
+  }
 }
 
 func (t BankOfAmericaTransaction) ParseTransactionFromCsvLine(csvLine []string) Transaction {
-	transamount, err := strconv.ParseFloat(csvLine[4], 2)
-	if err != nil {
-		panic(err)
-	}
+	transactionAmount, err := strconv.ParseFloat(csvLine[4], 2)
+	if err != nil { panic (err) }
+
+  var transactionType string
+  if transactionAmount < 0 {
+    transactionType = Payment
+  } else {
+    transactionType = Sale
+  }
 	return Transaction{
-		Transtype:   "",
+		TransactionType: transactionType,
+    BankType: Credit,
 		Description: csvLine[2],
-		Amount:      math.Abs(transamount),
+		Amount:      math.Abs(transactionAmount),
 		Date:        csvLine[0],
-		DbName:      "bofa",
 		BankName:    BankOfAmerica}
 }
