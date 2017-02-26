@@ -51,6 +51,11 @@ func GetAllTransactions(db sql.DB, bankName string) ([]models.Transaction, error
   return transactions, nil
 }
 
+func GetTransactionsAfterDate(db sql.DB, bankName string) ([]models.Transaction, error) {
+  //TODO
+  return nil, nil
+}
+
 func InsertTransaction(db *sql.DB, t models.Transaction) error {
   preparedStmt := `insert into transactions` +
   `(

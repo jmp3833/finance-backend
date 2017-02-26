@@ -3,7 +3,10 @@ package models
 import (
 	"math"
 	"strconv"
+  "time"
 )
+
+const csvDateFormat = "01/02/2006"
 
 const (
 	BankOfAmerica = "Bank of America"
@@ -73,19 +76,21 @@ func (t ChaseTransaction) ParseTransactionFromCsvLine(csvLine []string) Transact
 	if err != nil {
     panic(err)
   }
-
   if csvLine[0] == "Sale" {
     transactionType = Sale
   } else {
     transactionType = Payment
   }
-
+  date, err := time.Parse(csvDateFormat, csvLine[1])
+	if err != nil {
+    panic(err)
+  }
 	return Transaction{
     TransactionType: transactionType,
     BankType: Credit,
 		Description: csvLine[3],
 		Amount:      math.Abs(transactionAmount),
-		Date:        csvLine[1],
+		Date:        date.Format("2006-01-02"),
 		BankName:    Chase,
   }
 }
