@@ -47,6 +47,7 @@ func handleSeed(record models.Record) {
 		return
 	}
 	jobs.SeedDb(args[1], record)
+  fmt.Print("All done!")
 }
 
 func startApi() {

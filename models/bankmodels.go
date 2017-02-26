@@ -9,6 +9,7 @@ const (
 	BankOfAmerica = "Bank of America"
 	Simple        = "Simple inc. Bank"
 	Chase         = "Chase Bank"
+	NotImplemented = "NA"
 )
 
 const (

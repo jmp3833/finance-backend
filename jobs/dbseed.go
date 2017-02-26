@@ -30,6 +30,9 @@ func SeedDb(datafile string, record models.Record) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		db.InsertTransaction(dbinstance, record.ParseTransactionFromCsvLine(line))
+    err = db.InsertTransaction(dbinstance, record.ParseTransactionFromCsvLine(line))
+    if err != nil {
+      log.Fatal(err)
+    }
 	}
 }

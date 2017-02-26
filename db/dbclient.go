@@ -1,7 +1,6 @@
 package db
 
 import (
-  "fmt"
   "github.com/jmp3833/finance-backend/models"
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
@@ -27,9 +26,10 @@ func GetAllTransactions(db sql.DB, bankName string) ([]models.Transaction, error
     transaction models.Transaction
     transactions []models.Transaction
   )
-  //TODO bind to bank type
-  preparedStmt := "select * FROM transactions WHERE " + bankName + " LIMIT 100" + `;`
-  fmt.Print(preparedStmt)
+  preparedStmt := "select * FROM transactions WHERE bank_name = '" +
+    bankName +
+    "' LIMIT 100;"
+  log.Print(preparedStmt)
   rows, err := db.Query(preparedStmt)
   if err != nil { return nil, err }
   for rows.Next() {
@@ -61,12 +61,11 @@ func InsertTransaction(db *sql.DB, t models.Transaction) error {
     transaction_type,
     amount,
     date,
-    description,
-  ) values (?, ?, ?, ?, ?, ?, ?, ?)`
+    description
+  )` +  `values (?, ?, ?, ?, ?, ?, ?, ?)`
 
   stmt, err := db.Prepare(preparedStmt)
   if err != nil {
-    fmt.Print("Transaction: ", t, err)
     return err
   }
   _, err = stmt.Exec(
