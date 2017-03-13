@@ -6,6 +6,7 @@ import (
   "time"
 )
 
+const DbTimeFormat = "2006-01-02"
 const csvDateFormat = "01/02/2006"
 
 const (
@@ -90,7 +91,7 @@ func (t ChaseTransaction) ParseTransactionFromCsvLine(csvLine []string) Transact
     BankType: Credit,
 		Description: csvLine[3],
 		Amount:      math.Abs(transactionAmount),
-		Date:        date.Format("2006-01-02"),
+		Date:        date.Format(DbTimeFormat),
 		BankName:    Chase,
   }
 }

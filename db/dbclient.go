@@ -4,6 +4,7 @@ import (
   "github.com/jmp3833/finance-backend/models"
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
+  "time"
   "log"
 )
 
@@ -22,15 +23,18 @@ func GetDbInstance() *sql.DB {
 }
 
 func GetAllTransactions(db sql.DB, bankName string) ([]models.Transaction, error) {
+  query := "select * FROM transactions WHERE bank_name = '" +
+    bankName +
+    "' LIMIT 100;"
+  return parseTransactionsFromDb(db, query)
+}
+
+func parseTransactionsFromDb(db sql.DB, query string) ([]models.Transaction, error) {
   var (
     transaction models.Transaction
     transactions []models.Transaction
   )
-  preparedStmt := "select * FROM transactions WHERE bank_name = '" +
-    bankName +
-    "' LIMIT 100;"
-  log.Print(preparedStmt)
-  rows, err := db.Query(preparedStmt)
+  rows, err := db.Query(query)
   if err != nil { return nil, err }
   for rows.Next() {
     err = rows.Scan(
@@ -51,9 +55,9 @@ func GetAllTransactions(db sql.DB, bankName string) ([]models.Transaction, error
   return transactions, nil
 }
 
-func GetTransactionsAfterDate(db sql.DB, bankName string) ([]models.Transaction, error) {
-  //TODO
-  return nil, nil
+func GetTransactionsAfterDate(db sql.DB, bankName string, date time.Time) ([]models.Transaction, error) {
+  query := `select * from transactions where date > ` + date.Format(models.DbTimeFormat)
+  return parseTransactionsFromDb(db, query)
 }
 
 func InsertTransaction(db *sql.DB, t models.Transaction) error {
